@@ -23,31 +23,25 @@ This project uses some libraries to achieve it's objective
 
 In the top level directory you can run the following
 
-### `npm dev`
+### `npm start:api`
 
-Runs the app in the development mode.\
-Open [http://localhost:<PORT=9000>](http://localhost:9000) to view it in the browser.
+Start the Graphql API
 
-### `npm run test:unit`
+### `npm run start:app`
 
-Run units tests
+Run the view app
+
+### `npm run start`
+
+Start both
+
+### `npm run deps`
+
+Install all dependencies
 
 ### `npm run migrate`
 
-Run migrations
-
-### `npm run migrate:rollback`
-
-Rollback migrations
-
-### `npm run seed`
-
-Seed the database with test data
-
-### `npm run serve`
-
-Builds the app for production to the `dist` folder.\
-Your app is ready to be deployed!
+Run migrations and seed
 
 ## Running the App
 
@@ -58,13 +52,5 @@ To run the app, with dependencies (NodeJS, Postgres) installed and running
 - Configure your environment in the `.env` file
 - Install npm dependencies `npm install`
 - Run migrations `npm run migrate`
-- Run seeders `npm run migrate` (OPTIONAL)
-- Run the app in dev mode with `npm run dev`
-
-### In Production
-
-- Configure your environment in the `.env` file
-- Install npm dependencies `npm install`
-- Run migrations `npm run migrate`
-- Run migrations `npm run migrate`
-- Run the app in production mode with `npm run serve`
+- Run the app API
+- Run the App
