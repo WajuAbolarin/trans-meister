@@ -22,12 +22,14 @@ export class TransactionResolvers {
       }
     }
     const transactions = await ctx.prisma.transaction.findMany(query)
-    console.log(transactions)
+
+    delete query.take
+    const totalCount = await ctx.prisma.transaction.count(query)
     const value = {
       nodes: transactions,
       connection: {
-        totalCount: transactions.length,
-        pages: Math.abs(Math.ceil(transactions.length / take)),
+        totalCount,
+        pages: Math.abs(Math.ceil(totalCount / take)),
         cursor: transactions.length > 0 ? transactions[transactions.length - 1].id : undefined,
       },
     }

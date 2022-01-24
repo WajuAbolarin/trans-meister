@@ -12,7 +12,7 @@ export const typeDefs = gql`
 
   type Connection {
     totalCount: Int
-    cursor: ID!
+    cursor: ID
     pages: Int
   }
 
