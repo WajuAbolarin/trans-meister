@@ -4,33 +4,33 @@ import { Context } from '../context'
 export class TransactionResolvers {
   static async transactionList(
     _: any,
-    { startMonth, endMonth, cursor, take }: { startMonth: string; endMonth: string; cursor: string; take: number },
+    { startMonth, endMonth }: { startMonth: string; endMonth: string },
     ctx: Context
   ) {
-    let query: any = {
+    const transactions = await ctx.prisma.transaction.findMany({
       where: {
         transactionDate: {
           gte: new Date(startMonth),
           lte: new Date(endMonth),
         },
       },
-      take: take || undefined,
-    }
-    if (cursor) {
-      query.cursor = {
-        id: cursor || undefined,
-      }
-    }
-    const transactions = await ctx.prisma.transaction.findMany(query)
+      orderBy: {
+        transactionDate: 'asc',
+      },
+    })
 
-    delete query.take
-    const totalCount = await ctx.prisma.transaction.count(query)
+    const totalCount = await ctx.prisma.transaction.count({
+      where: {
+        transactionDate: {
+          gte: new Date(startMonth),
+          lte: new Date(endMonth),
+        },
+      },
+    })
     const value = {
       nodes: transactions,
       connection: {
         totalCount,
-        pages: Math.abs(Math.ceil(totalCount / take)),
-        cursor: transactions.length > 0 ? transactions[transactions.length - 1].id : undefined,
       },
     }
     return value

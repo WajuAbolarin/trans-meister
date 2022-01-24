@@ -1,8 +1,8 @@
 const gql = String.raw
 
 export const getTransactions = gql`
-  query transactions($startMonth: String, $endMonth: String, $take: Int!, $after: ID) {
-    transactionList(startMonth: $startMonth, endMonth: $endMonth, take: $take, after: $after) {
+  query transactions($startMonth: String, $endMonth: String) {
+    transactionList(startMonth: $startMonth, endMonth: $endMonth) {
       nodes {
         id
         account {
@@ -19,8 +19,6 @@ export const getTransactions = gql`
         transactionDate
       }
       connection {
-        cursor
-        pages
         totalCount
       }
     }

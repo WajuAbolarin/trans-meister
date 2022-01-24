@@ -2,7 +2,7 @@ import { gql } from 'apollo-server'
 
 export const typeDefs = gql`
   type Query {
-    transactionList(startMonth: String, endMonth: String, take: Int!, after: ID): PaginatedTransactionsResponse!
+    transactionList(startMonth: String, endMonth: String): PaginatedTransactionsResponse!
     transactionDetails(id: ID): Transaction
   }
   type PaginatedTransactionsResponse {
@@ -12,8 +12,6 @@ export const typeDefs = gql`
 
   type Connection {
     totalCount: Int
-    cursor: ID
-    pages: Int
   }
 
   type Transaction {
