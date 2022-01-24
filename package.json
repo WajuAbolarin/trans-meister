@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "migrate": "prisma migrate dev",
+    "start:api": "tsc && node dist/index.js",
+    "start:app": "npm run --prefix frontend dev",
+    "start": "npm run start:api & npm run start:app",
+    "deps": "npm install && npm install --prefix frontend "
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
