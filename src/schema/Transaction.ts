@@ -1,5 +1,5 @@
 import 'reflect-metadata'
-import { ObjectType, Field, ID, Float } from 'type-graphql'
+import { ObjectType, Field, ID, Float, Int } from 'type-graphql'
 
 @ObjectType()
 export class Transaction {
@@ -35,6 +35,21 @@ export class Transaction {
 
   @Field((type) => Date)
   updatedAt: Date
+}
+
+@ObjectType()
+export class PaginatedTransactions {
+  @Field((type) => [Transaction])
+  nodes: Transaction[]
+
+  @Field((type) => Int)
+  totalCount: number
+
+  @Field((type) => String, { nullable: true })
+  cursor?: string
+
+  @Field((type) => Int, { nullable: false })
+  pages: number
 }
 
 @ObjectType()
