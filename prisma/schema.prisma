@@ -27,6 +27,7 @@ model Transaction {
   accountId       Int
   categoryId      Int?
   reference       String?
+  currency        String?
   amount          Float?
   status          String?
   transactionDate DateTime
