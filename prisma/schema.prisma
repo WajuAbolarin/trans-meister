@@ -28,7 +28,7 @@ model Transaction {
   categoryId      Int?
   reference       String?
   currency        String?
-  amount          Float?
+  amount          Float
   status          String?
   transactionDate DateTime
   createdAt       DateTime  @default(now())
