@@ -7,7 +7,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@urql/vue": "^0.6.1",
     "@vue/apollo-composable": "^4.0.0-alpha.16",
+    "graphql": "^16.2.0",
     "vue": "^3.2.25",
     "vue-router": "^4.0.12"
   },

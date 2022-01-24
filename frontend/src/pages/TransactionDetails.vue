@@ -1,25 +1,42 @@
-<script setup>
-import { ref } from 'vue'
-const transaction = ref({
-  id: 'e206619a-6dd2-4cc1-8603-429631d46476',
-  amount: '-50',
-  account: 'Sydney Beard',
-  category: 'Another one',
-  currency: 'GBP',
-  description: 'sadsad',
-  reference: 'Ref 9869',
-  status: 'BOOKED',
-  transactionDate: '2021-06-22 12:55:26',
-  createdAt: '2021-06-22 12:55:26',
-  updatedAt: '2021-06-22 12:55:26',
-})
+<script>
+import { useQuery } from '@urql/vue'
+import { computed, ref, watch } from 'vue'
+import { transactionDetails } from '../api/queries'
+
+export default {
+  props: { id: String },
+  setup(props) {
+    const result = useQuery({
+      query: transactionDetails,
+      variables: {
+        id: props.id,
+      },
+    })
+    const transaction = computed(() => result.data?.value?.transactionDetails)
+
+    watch(transaction, (v) => {
+      console.log(v)
+    })
+    function transformDate(value) {
+      return new Date(value).toLocaleString()
+    }
+
+    return {
+      data: result.data,
+      fetching: result.fetching,
+      error: result.error,
+      transaction,
+      transformDate,
+    }
+  },
+}
 </script>
 
 <template>
   <main class="pt-16 px-10 space-y-8">
-    <h1 class="text-lg">Transanctions Detials</h1>
+    <h1 class="text-lg">Transactions Details</h1>
 
-    <section class="bg-white rounded-md w-8/12 mx-auto px-12 pt-6 pb-16 space-y-10">
+    <section class="bg-white rounded-md w-8/12 mx-auto px-12 pt-6 pb-16 space-y-10" v-if="transaction">
       <button
         @click="$router.back()"
         aria-label="go back"
@@ -36,19 +53,19 @@ const transaction = ref({
 
         <div class="flex flex-col space-y-3 w-1/2">
           <span class="font-bold text-slate-500">Account</span>
-          <span class="text-slate-900">{{ transaction.account }}</span>
+          <span class="text-slate-900">{{ transaction.account.name || 'N/A' }}</span>
         </div>
       </div>
 
       <div class="flex">
         <div class="flex flex-col space-y-3 w-1/2">
           <span class="font-bold text-slate-500">Category</span>
-          <span class="text-slate-900">{{ transaction.category }}</span>
+          <span class="text-slate-900">{{ transaction.category || 'N/A' }}</span>
         </div>
 
         <div class="flex flex-col space-y-3 w-1/2">
           <span class="font-bold text-slate-500">Description</span>
-          <span class="text-slate-900">{{ transaction.description }}</span>
+          <span class="text-slate-900">{{ transaction.description || 'N/A' }}</span>
         </div>
       </div>
 
@@ -65,7 +82,7 @@ const transaction = ref({
 
         <div class="flex flex-col space-y-3 w-1/2">
           <span class="font-bold text-slate-500">Date</span>
-          <span class="text-slate-900">{{ transaction.transactionDate }}</span>
+          <span class="text-slate-900">{{ transformDate(transaction.transactionDate) }}</span>
         </div>
       </div>
 
@@ -77,7 +94,7 @@ const transaction = ref({
 
         <div class="flex flex-col space-y-3 w-1/2">
           <span class="font-bold text-slate-500">Reference</span>
-          <span class="text-slate-900 font-bold">{{ transaction.description }}</span>
+          <span class="text-slate-900 font-bold">{{ transaction.reference || 'N/A' }}</span>
         </div>
       </div>
     </section>
