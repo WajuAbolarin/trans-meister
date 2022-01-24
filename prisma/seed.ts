@@ -9,7 +9,7 @@ let inputStream = Fs.createReadStream(join(__dirname, 'Transactions.csv'), 'utf8
 let success = 0
 inputStream
   .pipe(new CsvReadableStream({ parseNumbers: true, parseBooleans: true, trim: true }))
-  .on('data', async function (row) {
+  .on('data', async function (row: any) {
     const [
       id,
       account,
