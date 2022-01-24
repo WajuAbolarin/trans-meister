@@ -1,30 +1,11 @@
-import { Account, PaginatedTransactions } from '../schema/Transaction'
-import { Context } from '../schema/contextntext'
-import 'reflect-metadata'
-import {
-  Resolver,
-  Query,
-  Mutation,
-  Arg,
-  Ctx,
-  FieldResolver,
-  Root,
-  Int,
-  Field,
-  ID,
-  ResolverInterface,
-} from 'type-graphql'
-import { Transaction } from '../schema/Transaction'
+import { Transaction } from '@prisma/client'
+import { Context } from '../context'
 
-Resolver(Transaction)
-export class TransactionResolver implements ResolverInterface<Transaction> {
-  @Query((returns) => PaginatedTransactions)
-  async transactions(
-    @Arg('startMonth', { nullable: true }) startMonth: string,
-    @Arg('endMonth', { nullable: true }) endMonth: string,
-    @Arg('cursor', (type) => ID, { nullable: true }) cursor: string,
-    @Arg('take', (type) => Int, { nullable: true }) take: number,
-    @Ctx() ctx: Context
+export class TransactionResolvers {
+  static async transactionList(
+    _: any,
+    { startMonth, endMonth, cursor, take }: { startMonth: string; endMonth: string; cursor: string; take: number },
+    ctx: Context
   ) {
     let query: any = {
       where: {
@@ -41,25 +22,35 @@ export class TransactionResolver implements ResolverInterface<Transaction> {
       }
     }
     const transactions = await ctx.prisma.transaction.findMany(query)
-    return {
+    console.log(transactions)
+    const value = {
       nodes: transactions,
-      totalCount: transactions.length,
-      pages: Math.abs(Math.ceil(transactions.length / take)),
-      cursor: transactions.length > 0 ? transactions[transactions.length - 1].id : undefined,
+      connection: {
+        totalCount: transactions.length,
+        pages: Math.abs(Math.ceil(transactions.length / take)),
+        cursor: transactions.length > 0 ? transactions[transactions.length - 1].id : undefined,
+      },
     }
+    return value
   }
 
-  @FieldResolver()
-  async account(@Root() transaction: Transaction, @Ctx() ctx: Context) {
+  static Account(transaction: Transaction, _: any, ctx: Context) {
     return ctx.prisma.transaction
       .findUnique({
-        where: { id: '81bb91f8-051e-491d-accf-0e80df11ba13' },
+        where: { id: transaction.id },
       })
       .account()
   }
 
-  @Query((returns) => Transaction, { nullable: true })
-  async transactionDetails(@Arg('id') id: string, @Ctx() ctx: Context) {
+  static Category(transaction: Transaction, _: any, ctx: Context) {
+    return ctx.prisma.transaction
+      .findUnique({
+        where: { id: transaction.id },
+      })
+      .category()
+  }
+
+  static async transactionDetails(_: any, { id }: { id: string }, ctx: Context) {
     return ctx.prisma.transaction.findUnique({
       where: { id },
     })
